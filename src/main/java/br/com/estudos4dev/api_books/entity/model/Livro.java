@@ -1,5 +1,6 @@
 package br.com.estudos4dev.api_books.entity.model;
 
+import br.com.estudos4dev.api_books.entity.dto.LivroDTO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -27,4 +28,5 @@ public class Livro {
     private List<String> linguagens;
 
     private int quantidadeDownloads;
+
 }

@@ -1,28 +1,35 @@
 package br.com.estudos4dev.api_books.service;
 
+import br.com.estudos4dev.api_books.entity.dto.LivroDTO;
+import br.com.estudos4dev.api_books.entity.dto.RespostaApiDTO;
+import br.com.estudos4dev.api_books.entity.model.Livro;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class ConsumoApi {
+    private ObjectMapper obj = new ObjectMapper();
 
-    public String obterDados(String endereco) {
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(endereco))
-                    .GET()
-                    .build();
+    public String consumirApi(String endereco) throws IOException, InterruptedException {
+        String url = "https://gutendex.com/books/?search=";
+        String enderecoCompleto = url + endereco;
 
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(enderecoCompleto))
+                .build();
 
-            System.out.println("Resposta da API: " + response.body());
+        HttpResponse<String> response = client
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        System.out.println("dados vindos da api: \n" +response.body());
 
-            return response.body();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
+        var apiResponse = obj.readValue(response.body(), RespostaApiDTO.class);
+
+        System.out.println("Livro encontrado: " + apiResponse.toString());
+        return response.body();
     }
 }
