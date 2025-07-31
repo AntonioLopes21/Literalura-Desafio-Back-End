@@ -3,6 +3,7 @@
 > **Desafio Alura Spring Boot Challenge** — Uma API para gerenciamento e consulta de livros e autores, consumindo dados da API pública Gutendex.
 
 <h1>O projeto está em desenvolvimento e ainda não está 100%, faltando algumas validações que serão implementadas em breve.</h1>
+1 - validação de dados recebidos, algumas foram realizadas mas tem outras que precisam seguir o padrão que foi solicitado sem caracteres especiais e nomes por extenso, por exemplo.
 ---
 
 ## ✨ Sobre o projeto
