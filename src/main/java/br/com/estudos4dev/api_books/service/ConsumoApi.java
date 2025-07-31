@@ -29,7 +29,7 @@ public class ConsumoApi {
 
         HttpResponse<String> response = client
                 .send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println("dados vindos da api: \n" +response.body());
+        //System.out.println("dados vindos da api: \n" +response.body());
 
         RespostaApiDTO apiResponse = obj.readValue(response.body(), RespostaApiDTO.class);
 

@@ -17,6 +17,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.security.Principal;
+import java.sql.SQLOutput;
 import java.util.Optional;
 import java.util.Scanner;
 @RequiredArgsConstructor
@@ -46,31 +47,34 @@ public class ApiBooksApplication implements CommandLineRunner {
 			if(opcao == 1) {
 				System.out.println("1 - buscar livro por título");
 				System.out.println("Digite o titulo do livro:");
-				String titulo = scanner.nextLine();
+				String titulo = scanner.nextLine().toLowerCase();
 
-				livroService.findBookByTitleAndSave(titulo);
+				System.out.println(livroService.findBookByTitleAndSave(titulo));
 
 
 			} else if(opcao == 2) {
 				System.out.println("2 - listar livros registrados");
-				System.out.println("Digite o nome do livro:");
-				String nomeLivro = scanner.nextLine();
-
-				consumo.consumirApi(nomeLivro);
+				livroService.listarLivros();
 			} else if (opcao == 3) {
 				System.out.println("3 - listar autores registrados");
-
+				livroService.listarAutoresRegistrados();
 			} else if(opcao == 4) {
 				System.out.println("4 - listar autores vivos em um determinado ano");
+				System.out.println("Digite um ano:");
+				int epoca = scanner.nextInt(); scanner.nextLine();
+				livroService.listarAutoresVivosEmDeterminadaEpoca(epoca);
 
 			} else if(opcao == 5) {
 				System.out.println("5 - listar livros em um determinado idioma");
+				System.out.println("Digite o idioma no formato: pt, en, fr");
+				String idioma = scanner.nextLine();
+				livroService.listaLivrosPorIdioma(idioma);
 
 			}
-			else if(opcao == 6) {
-				System.out.println("6 - listar livros na api");
-				livroService.requisicoesApi();
-			}
+//			else if(opcao == 6) {
+//				System.out.println("6 - listar livros na api");
+//				livroService.requisicoesApi();
+//			}
 		}
 
 	}

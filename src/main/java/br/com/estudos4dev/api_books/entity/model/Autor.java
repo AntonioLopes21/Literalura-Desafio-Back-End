@@ -14,14 +14,13 @@ import java.util.List;
 @Table(name = "autores")
 public class Autor {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String nome;
     private int anoNascimento;
     private int anoMorte;
 
-    // Um autor tem vários livros
     @OneToMany(mappedBy = "autor")
     private List<Livro> listaDeLivros;
 

@@ -12,4 +12,8 @@ public record RespostaApiDTO (List<LivroDTO> results){
                 results +
                 "\n";
     }
+
+    public LivroDTO converteDadosParaLivroDTO() {
+        return results.isEmpty() ? null : results.get(0); // pega o primeiro
+    }
 }
