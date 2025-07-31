@@ -2,23 +2,35 @@ package br.com.estudos4dev.api_books.service;
 
 import br.com.estudos4dev.api_books.entity.dto.AutorDTO;
 import br.com.estudos4dev.api_books.entity.dto.LivroDTO;
+import br.com.estudos4dev.api_books.entity.dto.RespostaApiDTO;
+
 import br.com.estudos4dev.api_books.entity.model.Autor;
 import br.com.estudos4dev.api_books.entity.model.Livro;
 import br.com.estudos4dev.api_books.repository.LivroRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
-import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class LivroService {
+    ConsumoApi consumo = new ConsumoApi();
+    private List<Livro> listaDeLivros;
+
 
     @Autowired
     private final LivroRepository livroRepository;
+    private final ObjectMapper obj = new ObjectMapper();
 
     public static void exibeMenu() throws IOException, InterruptedException {
 
@@ -33,28 +45,11 @@ public class LivroService {
                 "0 - sair" );
     }
 
+    public void findBookByTitleAndSave(String titulo) throws IOException, InterruptedException {
+        RespostaApiDTO apiResponse = consumo.consumirApi(titulo);
 
-//    public Optional<Livro> encontrarPorTituloIgnoreCase(String titulo) {
-//        Optional<Livro> livro = livroRepository.searchByTituloIgnoreCase(titulo);
-//
-//        if(livro.isPresent()) {
-//            Livro novoLivro = livroRepository.save(livro.get());
-//            System.out.println(novoLivro);
-//            return livroRepository.searchByTituloIgnoreCase(titulo);
-//        }
-//
-//        return Optional.empty();
-//    }
+        System.out.println(apiResponse);
 
-    public void findBookByTitle(String titulo) {
-        Optional<Livro> livro = livroRepository.findByTitulo(titulo);
-
-        if (livro.isPresent()) {
-            Livro livroEncontrado = livro.get();
-            System.out.println("Livro encontrado: " + livroEncontrado.getTitulo());
-        } else {
-            System.out.println("Livro não encontrado.");
-        }
     }
 
     public List<LivroDTO> listaDeLivros() {
@@ -74,28 +69,6 @@ public class LivroService {
                 .toList();
     }
 
-//    public List<AutorDTO> listaDeAutores() {
-//        if(livroRepository.count() > 0) {
-//            List<AutorDTO> autores = livroRepository.findAllAutores()
-//                    .stream()
-//                    .map(autor -> new AutorDTO(autor.getNome(), autor.getAnoNascimento(), autor.getAnoMorte()))
-//                    .toList();
-//            autores.forEach(System.out::println);
-//            return autores;
-//        } else {
-//            System.out.println("Nenhum autor cadastrado.");
-//            return List.of();
-//        }
-//    }
-//
-//    public List<AutorDTO> autoresVivosEmAno(int ano) {
-//        return livroRepository.findAllAutores()
-//                .stream()
-//                .filter(autor -> autor.getAnoMorte() > ano || autor.getAnoMorte() == 0)
-//                .map(autor -> new AutorDTO(autor.getNome(), autor.getAnoNascimento(), autor.getAnoMorte()))
-//                .toList();
-//    }
-
     public List<LivroDTO> livrosPorIdioma(String idioma) {
         return livroRepository.findAll()
                 .stream()
@@ -112,6 +85,20 @@ public class LivroService {
                         livro.getQuantidadeDownloads()
                 ))
                 .toList();
+    }
+
+    public void requisicoesApi() throws IOException, InterruptedException {
+        String url = "https://gutendex.com/books";
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .build();
+
+        HttpResponse<String> response = client
+                .send(request, HttpResponse.BodyHandlers.ofString());
+        var apiResponse = obj.readValue(response.body(), RespostaApiDTO.class);
+        System.out.println("dados vindos da api: \n" + apiResponse);
     }
 
 

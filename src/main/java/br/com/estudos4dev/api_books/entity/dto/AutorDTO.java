@@ -8,4 +8,13 @@ public record AutorDTO(
         @JsonProperty("name") String nome,
         @JsonProperty("birth_year") Integer anoNascimento,
         @JsonProperty("death_year") Integer anoFalecimento
-) {}
+) {
+    @Override
+    public String toString() {
+        return "Autor:" +
+                "nome='" + nome + '\'' +
+                ", anoNascimento=" + anoNascimento +
+                ", anoFalecimento=" + anoFalecimento +
+                "\n";
+    }
+}

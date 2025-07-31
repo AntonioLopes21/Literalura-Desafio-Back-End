@@ -6,7 +6,6 @@ import lombok.Getter;
 
 import java.util.List;
 
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record LivroDTO(@JsonProperty("id")
                        Long id,
@@ -23,4 +22,22 @@ public record LivroDTO(@JsonProperty("id")
                        @JsonProperty("download_count")
                        Integer quantidadeDownloads
 
-) { }
+) {
+    @Override
+    public String toString() {
+        return "Livro: " +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", autores=" + autores +
+                ", linguagens=" + linguagens +
+                ", quantidadeDownloads=" + quantidadeDownloads +
+                "\n";
+    }
+
+    public List<String> languages() {
+        return linguagens;
+    }
+
+    public ThreadLocal<Object> authors() {
+    }
+}

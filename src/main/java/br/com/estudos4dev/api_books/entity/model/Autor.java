@@ -24,4 +24,5 @@ public class Autor {
     // Um autor tem vários livros
     @OneToMany(mappedBy = "autor")
     private List<Livro> listaDeLivros;
+
 }

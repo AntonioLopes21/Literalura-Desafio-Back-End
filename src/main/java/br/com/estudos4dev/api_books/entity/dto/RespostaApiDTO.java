@@ -6,4 +6,10 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public record RespostaApiDTO (List<LivroDTO> results){
+    @Override
+    public String toString() {
+        return "\nResultado geral: \n" +
+                results +
+                "\n";
+    }
 }
